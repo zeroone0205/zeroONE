@@ -9,26 +9,50 @@
 
     <style>
         /* --- 基本設定 --- */
-        body { margin: 0; font-family: "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; color: #333; line-height: 1.8; overflow-x: hidden; /* 横スクロール防止 */ }
+        body { 
+            margin: 0; 
+            font-family: "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; 
+            color: #333; 
+            line-height: 1.8; 
+            overflow-x: hidden; 
+            /* 全体にうっすらとしたドットパターンを敷いてIT感を出す */
+            background-color: #fafafa;
+            background-image: radial-gradient(#ddd 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
         a { text-decoration: none; color: inherit; transition: opacity 0.3s; }
         a:hover { opacity: 0.7; }
         ul { list-style: none; padding: 0; }
         input, select, textarea, button { font-family: inherit; }
         
         /* --- ヘッダー --- */
-        .site-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; position: fixed; width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.95); z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .site-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; position: fixed; width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.95); z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: all 0.3s; backdrop-filter: blur(5px); }
         .logo img { height: 40px; width: auto; display: block; }
-        .nav-menu ul { display: flex; gap: 30px; font-size: 14px; font-weight: bold; }
+        .nav-menu ul { display: flex; gap: 30px; font-size: 14px; font-weight: bold; letter-spacing: 1px; }
         
         /* --- 共通セクション設定 --- */
-        section { padding: 100px 20px; max-width: 1000px; margin: 0 auto; overflow: hidden; /* アニメーションのはみ出し防止 */ }
-        .section-number { font-size: 14px; font-weight: bold; color: #999; display: block; margin-bottom: 15px; letter-spacing: 2px; }
-        .section-title { font-size: 32px; margin-bottom: 60px; letter-spacing: 1px; font-weight: bold; position: relative; display: inline-block; }
-        /* タイトル下の装飾線アニメーション用 */
+        section { padding: 120px 20px; max-width: 100%; margin: 0 auto; overflow: hidden; position: relative; }
+        /* コンテンツ幅を制限するラッパー */
+        .container { max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; }
+
+        .section-number { font-size: 14px; font-weight: bold; color: #888; display: block; margin-bottom: 15px; letter-spacing: 3px; font-family: 'Arial', sans-serif; }
+        .section-title { font-size: 36px; margin-bottom: 70px; letter-spacing: 2px; font-weight: 800; position: relative; display: inline-block; }
         .section-title::after { content: ''; position: absolute; bottom: -15px; left: 0; width: 0; height: 3px; background: #333; transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .section-title.aos-animate::after { width: 60px; }
 
-        /* --- ヒーローエリア（トップ画像設定） --- */
+        /* --- 黒背景セクション用のクラス --- */
+        .section-dark {
+            background-color: #111;
+            color: #fff;
+            /* 黒背景にうっすら斜めラインを入れてリッチにする */
+            background-image: linear-gradient(45deg, #1a1a1a 25%, transparent 25%, transparent 50%, #1a1a1a 50%, #1a1a1a 75%, transparent 75%, transparent);
+            background-size: 40px 40px;
+        }
+        .section-dark .section-number { color: #aaa; }
+        .section-dark .section-title::after { background: #fff; }
+        .section-dark .feature-item p { color: #ccc; } 
+
+        /* --- ヒーローエリア --- */
         .hero { 
             height: 100vh; 
             display: flex; 
@@ -43,8 +67,7 @@
             background-position: center;
             margin-bottom: 0; 
             padding: 0;
-            /* 背景自体も少しズームアウトさせるアニメーション */
-            animation: bgZoom 10s infinite alternate ease-in-out;
+            animation: bgZoom 15s infinite alternate ease-in-out;
         }
         @keyframes bgZoom { from { background-size: 100%; } to { background-size: 110%; } }
 
@@ -52,63 +75,82 @@
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5); /* 少し暗くして文字を強調 */
+            /* グラデーションで黒を重ねてよりドラマチックに */
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
         }
-        .hero-content { position: relative; z-index: 1; }
-        .hero h2 { font-size: 80px; margin-bottom: 20px; letter-spacing: 4px; font-weight: 900; text-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .hero p { font-size: 20px; letter-spacing: 1px; font-weight: bold; }
+        .hero-content { position: relative; z-index: 1; mix-blend-mode: overlay; /* 文字の重なりをおしゃれに */ }
+        /* mix-blend-modeが効かない場合のために白文字を保証 */
+        .hero-content h2, .hero-content p { color: #fff; mix-blend-mode: normal; text-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        
+        .hero h2 { font-size: 90px; margin-bottom: 10px; letter-spacing: 5px; font-weight: 900; line-height: 1; }
+        .hero p { font-size: 18px; letter-spacing: 2px; font-weight: 500; margin-top: 10px;}
 
         /* --- コンセプト --- */
-        .concept-content p { font-size: 16px; text-align: justify; }
+        .concept-content p { font-size: 16px; text-align: justify; line-height: 2.2; color: #444; }
 
         /* --- 特徴（Gridレイアウト） --- */
-        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; perspective: 1000px; /* 3D効果用 */ }
-        .feature-item { border: 1px solid #eee; padding: 40px 30px; text-align: center; background: #fff; box-shadow: 0 15px 30px rgba(0,0,0,0.1); transition: transform 0.3s; }
-        .feature-item:hover { transform: translateY(-10px); /* ホバー時に少し浮く */ }
-        .feature-item h4 { font-size: 24px; margin-bottom: 20px; letter-spacing: 1px; color: #000; }
-        .feature-item p { font-size: 14px; color: #666; }
+        /* カードのデザインを黒背景に合わせて調整 */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; perspective: 1000px; }
+        .feature-item { 
+            border: 1px solid rgba(255,255,255,0.1); 
+            padding: 50px 30px; 
+            text-align: center; 
+            background: rgba(255,255,255,0.05); /* 半透明の白 */
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3); 
+            transition: transform 0.3s, background 0.3s; 
+        }
+        .feature-item:hover { transform: translateY(-10px); background: rgba(255,255,255,0.1); }
+        .feature-item h4 { font-size: 24px; margin-bottom: 20px; letter-spacing: 1px; color: #fff; font-weight: bold; }
+        .feature-item p { font-size: 14px; color: #ccc; }
         
         /* --- 拠点（相模原） --- */
-        .project-item { display: flex; gap: 50px; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 60px; }
-        .project-img { width: 50%; aspect-ratio: 16/9; background-color: #ddd; object-fit: cover; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-radius: 8px; }
+        .project-item { display: flex; gap: 60px; align-items: center; border-bottom: 1px solid #ddd; padding-bottom: 60px; }
+        .project-img { width: 50%; aspect-ratio: 16/9; background-color: #333; object-fit: cover; box-shadow: 20px 20px 0px rgba(0,0,0,0.1); /* 影をハードにしておしゃれに */ border-radius: 2px; filter: grayscale(100%); transition: filter 0.5s; }
+        .project-img:hover { filter: grayscale(0%); /* ホバーでカラーに */ }
         .project-info { width: 50%; }
-        .project-info h4 { font-size: 28px; margin-bottom: 15px; font-weight: bold; }
-        .address { font-style: normal; color: #666; margin-bottom: 20px; display: block; font-size: 18px; }
+        .project-info h4 { font-size: 30px; margin-bottom: 20px; font-weight: bold; letter-spacing: -1px; }
+        .address { font-style: normal; color: #666; margin-bottom: 20px; display: block; font-size: 16px; border-left: 3px solid #000; padding-left: 15px; }
 
         /* --- 会社概要（テーブル） --- */
-        .company-table { width: 100%; border-collapse: collapse; text-align: left; box-shadow: 0 5px 20px rgba(0,0,0,0.05); background: #fff; }
-        .company-table th, .company-table td { padding: 25px; border-bottom: 1px solid #eee; }
-        .company-table th { width: 30%; background-color: #333; font-weight: bold; color: #fff; }
+        .company-table { width: 100%; border-collapse: collapse; text-align: left; background: #fff; border: 1px solid #eee; }
+        .company-table th, .company-table td { padding: 30px; border-bottom: 1px solid #eee; }
+        .company-table th { width: 25%; background-color: #f9f9f9; font-weight: bold; color: #111; border-right: 1px solid #eee; }
         .company-table tr:last-child th, .company-table tr:last-child td { border-bottom: none; }
         
-        /* --- 応募フォーム --- */
-        .form-container { max-width: 600px; margin: 0 auto; background: #fff; padding: 50px; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
+        /* --- 応募フォーム（黒背景用） --- */
+        .form-container { max-width: 600px; margin: 0 auto; background: #fff; padding: 60px; border-radius: 4px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
         .form-group { margin-bottom: 30px; }
-        .form-label { display: block; margin-bottom: 10px; font-weight: bold; font-size: 16px; color: #333; }
-        .form-control { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 8px; box-sizing: border-box; font-size: 16px; transition: border-color 0.3s; }
-        .form-control:focus { border-color: #333; outline: none; }
-        .radio-group label { margin-right: 25px; font-weight: normal; cursor: pointer; font-size: 16px; display: inline-flex; align-items: center; }
-        .radio-group input[type="radio"] { margin-right: 8px; transform: scale(1.2); }
-        .submit-btn { background-color: #000; color: #fff; padding: 20px 40px; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; letter-spacing: 2px; width: 100%; display: block; margin-top: 40px; transition: all 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-        .submit-btn:hover { background-color: #333; transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
+        .form-label { display: block; margin-bottom: 10px; font-weight: bold; font-size: 14px; color: #111; letter-spacing: 1px; }
+        .form-control { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 0; /* 角丸なしでシャープに */ box-sizing: border-box; font-size: 16px; transition: border-color 0.3s, background 0.3s; background: #fdfdfd; }
+        .form-control:focus { border-color: #111; outline: none; background: #fff; }
+        
+        .radio-group { display: flex; gap: 20px; }
+        .radio-group label { cursor: pointer; font-size: 16px; display: flex; align-items: center; color: #333; }
+        .radio-group input[type="radio"] { margin-right: 8px; transform: scale(1.2); accent-color: #000; }
+        
+        .submit-btn { background-color: #000; color: #fff; padding: 20px 40px; border: 1px solid #000; border-radius: 0; cursor: pointer; font-size: 16px; font-weight: bold; letter-spacing: 2px; width: 100%; display: block; margin-top: 40px; transition: all 0.3s; }
+        .submit-btn:hover { background-color: #fff; color: #000; }
 
         /* --- フッター --- */
-        .site-footer { background-color: #111; color: #fff; padding: 80px 20px; text-align: center; margin-top: 100px; }
-        .footer-nav { display: flex; justify-content: center; gap: 40px; margin-bottom: 40px; font-size: 16px; font-weight: bold; }
-        .copyright { font-size: 14px; color: #888; }
+        .site-footer { background-color: #000; color: #fff; padding: 100px 20px; text-align: center; border-top: 1px solid #333; }
+        .footer-nav { display: flex; justify-content: center; gap: 40px; margin-bottom: 40px; font-size: 14px; font-weight: bold; letter-spacing: 1px; }
+        .copyright { font-size: 12px; color: #666; letter-spacing: 1px; }
 
         /* --- スマホ向け調整 --- */
         @media (max-width: 768px) {
             .hero h2 { font-size: 50px; }
-            .hero p { font-size: 16px; }
-            .project-item { flex-direction: column; }
+            .hero p { font-size: 14px; }
+            .project-item { flex-direction: column; gap: 30px; }
             .project-img, .project-info { width: 100%; }
+            .project-img { box-shadow: 10px 10px 0px rgba(0,0,0,0.1); }
             .site-header { padding: 15px 20px; }
             .logo img { height: 30px; }
             .nav-menu { display: none; }
-            .company-table th, .company-table td { display: block; width: 100%; padding: 15px; }
-            .company-table th { background: #333; color: #fff; }
+            .company-table th, .company-table td { display: block; width: 100%; padding: 15px; border-right: none; }
+            .company-table th { background: #f0f0f0; }
             .form-container { padding: 30px 20px; }
+            .feature-item { padding: 30px 20px; }
         }
     </style>
 </head>
@@ -116,7 +158,7 @@
 
     <header class="site-header">
         <div class="logo" data-aos="fade-down" data-aos-easing="ease-out-cubic" data-aos-duration="1000">
-            <img src="logo.png" alt="zeroONE Logo">
+            <img src="logo.png.png" alt="zeroONE Logo">
         </div>
         <nav class="nav-menu" data-aos="fade-down" data-aos-easing="ease-out-cubic" data-aos-duration="1000" data-aos-delay="200">
             <ul>
@@ -134,117 +176,127 @@
             <div class="hero-content">
                 <h2 data-aos="zoom-in-up" data-aos-duration="1500" data-aos-easing="ease-out-back">0 to 1</h2>
                 <p data-aos="zoom-in" data-aos-delay="500" data-aos-duration="1500" data-aos-easing="ease-out-back">基本を徹底し、無限の価値へ。</p>
-                <p style="margin-top: 200px; font-size: 14px; letter-spacing: 4px; opacity: 0.8; font-weight: bold;" data-aos="fade-up" data-aos-delay="1200" data-aos-offset="0">SCROLL DOWN ↓</p>
+                <p style="margin-top: 150px; font-size: 14px; letter-spacing: 4px; opacity: 0.8; font-weight: bold;" data-aos="fade-up" data-aos-delay="1200" data-aos-offset="0">SCROLL DOWN ↓</p>
             </div>
         </section>
 
         <section id="concept">
-            <span class="section-number" data-aos="fade-right" data-aos-duration="1000">01 コンセプト</span>
-            <h3 class="section-title" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1000">ゼロからイチへ</h3>
-            <div class="concept-content" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1200">
-                <p>
-                    0と1。それはすべての原点であり、無限の可能性。<br><br>
-                    私たち株式会社zeroONEは、コンピュータの世界にルーツを持つ配送会社です。<br>
-                    0と1の組み合わせが無限のデジタル世界を創るように、私たちは「基本（0）」を徹底し、確実な「成果（1）」を積み上げることで、物流という社会インフラに無限の価値を生み出します。<br><br>
-                    複雑な時代だからこそ、やるべきことはシンプルに。<br>
-                    荷物を待つお客様へ、正確に、安全に、誠実に届けること。<br>
-                    その実直な積み重ねが、揺るぎない信頼になると信じています。
-                </p>
+            <div class="container">
+                <span class="section-number" data-aos="fade-right" data-aos-duration="1000">01 CONCEPT</span>
+                <h3 class="section-title" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1000">ゼロからイチへ</h3>
+                <div class="concept-content" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1200">
+                    <p>
+                        0と1。それはすべての原点であり、無限の可能性。<br><br>
+                        私たち株式会社zeroONEは、コンピュータの世界にルーツを持つ配送会社です。<br>
+                        0と1の組み合わせが無限のデジタル世界を創るように、私たちは「基本（0）」を徹底し、確実な「成果（1）」を積み上げることで、物流という社会インフラに無限の価値を生み出します。<br><br>
+                        複雑な時代だからこそ、やるべきことはシンプルに。<br>
+                        荷物を待つお客様へ、正確に、安全に、誠実に届けること。<br>
+                        その実直な積み重ねが、揺るぎない信頼になると信じています。
+                    </p>
+                </div>
             </div>
         </section>
 
-        <section id="feature">
-            <span class="section-number" data-aos="fade-right">02 特徴</span>
-            <h3 class="section-title" data-aos="fade-right" data-aos-delay="200">私たちの強み</h3>
-            <div class="feature-grid">
-                <div class="feature-item" data-aos="flip-left" data-aos-delay="400" data-aos-duration="1500">
-                    <h4>IT×物流</h4>
-                    <p>IT思考で最適化された、<br>働きやすく無駄のない環境。</p>
-                </div>
-                <div class="feature-item" data-aos="flip-left" data-aos-delay="600" data-aos-duration="1500">
-                    <h4>プロフェッショナル</h4>
-                    <p>基本（ゼロ）を徹底し、<br>プロの品質（イチ）を築く。</p>
-                </div>
-                <div class="feature-item" data-aos="flip-left" data-aos-delay="800" data-aos-duration="1500">
-                    <h4>成長環境</h4>
-                    <p>個の力を最大化し、<br>組織として無限の成果を創る。</p>
+        <section id="feature" class="section-dark">
+            <div class="container">
+                <span class="section-number" data-aos="fade-right">02 FEATURE</span>
+                <h3 class="section-title" data-aos="fade-right" data-aos-delay="200">私たちの強み</h3>
+                <div class="feature-grid">
+                    <div class="feature-item" data-aos="flip-left" data-aos-delay="400" data-aos-duration="1500">
+                        <h4>IT×物流</h4>
+                        <p>IT思考で最適化された、<br>働きやすく無駄のない環境。</p>
+                    </div>
+                    <div class="feature-item" data-aos="flip-left" data-aos-delay="600" data-aos-duration="1500">
+                        <h4>プロフェッショナル</h4>
+                        <p>基本（ゼロ）を徹底し、<br>プロの品質（イチ）を築く。</p>
+                    </div>
+                    <div class="feature-item" data-aos="flip-left" data-aos-delay="800" data-aos-duration="1500">
+                        <h4>成長環境</h4>
+                        <p>個の力を最大化し、<br>組織として無限の成果を創る。</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="projects">
-            <span class="section-number" data-aos="fade-right">03 拠点情報</span>
-            <h3 class="section-title" data-aos="fade-right" data-aos-delay="200">アクセス</h3>
-            
-            <div class="project-list">
-                <article class="project-item">
-                    <img src="warehouse.jpg.png" alt="相模原拠点 倉庫画像" class="project-img" data-aos="fade-right" data-aos-delay="300" data-aos-duration="1500" data-aos-easing="ease-out-back">
-                    
-                    <div class="project-info" data-aos="fade-left" data-aos-delay="500" data-aos-duration="1500" data-aos-easing="ease-out-back">
-                        <h4>相模原ベース</h4>
-                        <address class="address">〒252-0216<br>神奈川県相模原市中央区清新6-10-8</address>
-                        <p>zeroONEの配送拠点。</p>
-                    </div>
-                </article>
+            <div class="container">
+                <span class="section-number" data-aos="fade-right">03 LOCATION</span>
+                <h3 class="section-title" data-aos="fade-right" data-aos-delay="200">アクセス</h3>
+                
+                <div class="project-list">
+                    <article class="project-item">
+                        <img src="warehouse.jpg.png" alt="相模原拠点 倉庫画像" class="project-img" data-aos="fade-right" data-aos-delay="300" data-aos-duration="1500" data-aos-easing="ease-out-back">
+                        
+                        <div class="project-info" data-aos="fade-left" data-aos-delay="500" data-aos-duration="1500" data-aos-easing="ease-out-back">
+                            <h4>相模原ベース</h4>
+                            <address class="address">〒252-0216<br>神奈川県相模原市中央区清新6-10-8</address>
+                            <p>zeroONEの配送拠点。</p>
+                        </div>
+                    </article>
+                </div>
             </div>
         </section>
 
         <section id="company">
-            <span class="section-number" data-aos="fade-right">04 会社概要</span>
-            <h3 class="section-title" data-aos="fade-right" data-aos-delay="200">企業情報</h3>
-            
-            <table class="company-table" data-aos="flip-up" data-aos-delay="400" data-aos-duration="1500">
-                <tr>
-                    <th>会社名</th>
-                    <td>株式会社zeroONE</td>
-                </tr>
-                <tr>
-                    <th>所在地</th>
-                    <td>〒252-0216 神奈川県相模原市中央区清新6-10-8</td>
-                </tr>
-                <tr>
-                    <th>事業内容</th>
-                    <td>軽貨物運送事業 / 物流コンサルティング / ITソリューション</td>
-                </tr>
-            </table>
+            <div class="container">
+                <span class="section-number" data-aos="fade-right">04 COMPANY</span>
+                <h3 class="section-title" data-aos="fade-right" data-aos-delay="200">企業情報</h3>
+                
+                <table class="company-table" data-aos="flip-up" data-aos-delay="400" data-aos-duration="1500">
+                    <tr>
+                        <th>会社名</th>
+                        <td>株式会社zeroONE</td>
+                    </tr>
+                    <tr>
+                        <th>所在地</th>
+                        <td>〒252-0216 神奈川県相模原市中央区清新6-10-8</td>
+                    </tr>
+                    <tr>
+                        <th>事業内容</th>
+                        <td>軽貨物運送事業 / 物流コンサルティング / ITソリューション</td>
+                    </tr>
+                </table>
+            </div>
         </section>
 
-        <section id="contact">
-            <span class="section-number" data-aos="fade-right">05 採用情報</span>
-            <h3 class="section-title" data-aos="fade-right" data-aos-delay="200">ドライバー応募フォーム</h3>
-            <p style="text-align: center; margin-bottom: 50px; font-size: 18px; font-weight: bold;" data-aos="fade-up" data-aos-delay="300">共に未来へ走る仲間を募集しています。</p>
-            
-            <div class="form-container" data-aos="zoom-in" data-aos-delay="400" data-aos-duration="1500" data-aos-easing="ease-out-back">
-                <form action="" method="post">
-                    
-                    <div class="form-group">
-                        <label class="form-label">お名前</label>
-                        <input type="text" name="name" class="form-control" placeholder="例：山田 太郎" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">生年月日</label>
-                        <input type="date" name="birthday" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">配送経験の有無</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="experience" value="あり" onclick="toggleCarOption(true)"> 経験あり</label>
-                            <label><input type="radio" name="experience" value="なし" onclick="toggleCarOption(false)" checked> 未経験</label>
+        <section id="contact" class="section-dark">
+            <div class="container">
+                <span class="section-number" data-aos="fade-right">05 RECRUIT</span>
+                <h3 class="section-title" data-aos="fade-right" data-aos-delay="200">ドライバー応募フォーム</h3>
+                <p style="text-align: center; margin-bottom: 50px; font-size: 18px; font-weight: bold; color: #ddd;" data-aos="fade-up" data-aos-delay="300">共に未来へ走る仲間を募集しています。</p>
+                
+                <div class="form-container" data-aos="zoom-in" data-aos-delay="400" data-aos-duration="1500" data-aos-easing="ease-out-back">
+                    <form action="" method="post">
+                        
+                        <div class="form-group">
+                            <label class="form-label">お名前</label>
+                            <input type="text" name="name" class="form-control" placeholder="例：山田 太郎" required>
                         </div>
-                    </div>
 
-                    <div class="form-group" id="car-option-group" style="display: none;">
-                        <label class="form-label">持ち込み車両の有無</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="car_owner" value="あり"> 車両あり</label>
-                            <label><input type="radio" name="car_owner" value="なし" checked> 車両なし（リース希望）</label>
+                        <div class="form-group">
+                            <label class="form-label">生年月日</label>
+                            <input type="date" name="birthday" class="form-control" required>
                         </div>
-                    </div>
 
-                    <button type="submit" class="submit-btn">応募内容を送信する</button>
-                </form>
+                        <div class="form-group">
+                            <label class="form-label">配送経験の有無</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="experience" value="あり" onclick="toggleCarOption(true)"> 経験あり</label>
+                                <label><input type="radio" name="experience" value="なし" onclick="toggleCarOption(false)" checked> 未経験</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="car-option-group" style="display: none;">
+                            <label class="form-label">持ち込み車両の有無</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="car_owner" value="あり"> 車両あり</label>
+                                <label><input type="radio" name="car_owner" value="なし" checked> 車両なし（リース希望）</label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-btn">応募内容を送信する</button>
+                    </form>
+                </div>
             </div>
         </section>
     </main>
@@ -262,25 +314,22 @@
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
-        // アニメーションの初期化設定（全体的にダイナミックな設定に変更）
         AOS.init({
-            offset: 200,         // アニメーション開始位置を早める
-            duration: 1200,      // アニメーション時間を長くして動きを強調
-            easing: 'ease-out-back', // 勢いよく飛び出して少し戻るような動き
-            delay: 100,          // 基本の遅延時間
-            once: false,         // falseにすると、スクロールバックした時にも再度アニメーションする（常に動く）
-            mirror: true,        // スクロールバック時のアニメーションを有効化
-            anchorPlacement: 'top-bottom', // 要素の上端が画面の下端に入ったら開始
+            offset: 200,
+            duration: 1200,
+            easing: 'ease-out-back',
+            delay: 100,
+            once: false,
+            mirror: true,
+            anchorPlacement: 'top-bottom',
         });
 
-        // 経験の有無で車両の質問を表示/非表示にする機能
         function toggleCarOption(isExperienced) {
             const carGroup = document.getElementById('car-option-group');
             if (isExperienced) {
                 carGroup.style.display = 'block';
-                // 表示された要素にもアニメーションを適用（任意）
                 carGroup.setAttribute('data-aos', 'fade-up');
-                AOS.refresh(); // AOSの状態を更新
+                AOS.refresh();
             } else {
                 carGroup.style.display = 'none';
             }
