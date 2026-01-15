@@ -8,65 +8,88 @@
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
     <style>
-        /* --- 基本設定 --- */
+        /* --- リセット & 基本設定 --- */
+        * { box-sizing: border-box; }
+        body, html { margin: 0; padding: 0; width: 100%; }
         body { 
-            margin: 0; 
-            font-family: "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; 
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; 
             color: #333; 
             line-height: 1.8; 
-            overflow-x: hidden; 
-            /* 全体にうっすらとしたドットパターンを敷いてIT感を出す */
-            background-color: #fafafa;
-            background-image: radial-gradient(#ddd 1px, transparent 1px);
-            background-size: 20px 20px;
+            background-color: #fff; /* 基本は白 */
+            overflow-x: hidden; /* 横スクロール防止 */
         }
         a { text-decoration: none; color: inherit; transition: opacity 0.3s; }
         a:hover { opacity: 0.7; }
-        ul { list-style: none; padding: 0; }
-        input, select, textarea, button { font-family: inherit; }
-        
-        /* --- ヘッダー（修正箇所） --- */
+        ul { list-style: none; padding: 0; margin: 0; }
+        img { max-width: 100%; height: auto; display: block; }
+        input, select, textarea, button { font-family: inherit; font-size: 16px; }
+
+        /* --- ヘッダー（最優先修正：固定表示） --- */
         .site-header { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 70px; /* 高さを固定 */
+            background-color: #ffffff; /* 完全な白 */
+            border-bottom: 1px solid #eaeaea; /* 薄いグレーのライン */
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 15px 40px; 
-            position: fixed; 
-            /* ここを追加：位置を明示的に指定 */
-            top: 0;
-            left: 0;
-            width: 100%; 
-            box-sizing: border-box; 
-            background: rgba(255,255,255,0.95); 
-            z-index: 9999; /* 重なり順を最強にする */
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
-            transition: all 0.3s; 
-            backdrop-filter: blur(5px); 
+            padding: 0 40px; 
+            z-index: 9999; /* 最前面に配置 */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
         }
-        .logo img { height: 40px; width: auto; display: block; }
-        .nav-menu ul { display: flex; gap: 30px; font-size: 14px; font-weight: bold; letter-spacing: 1px; }
+        .logo img { height: 35px; width: auto; }
         
-        /* --- 共通セクション設定 --- */
-        section { padding: 120px 20px; max-width: 100%; margin: 0 auto; overflow: hidden; position: relative; }
-        /* コンテンツ幅を制限するラッパー */
-        .container { max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; }
-
-        .section-number { font-size: 14px; font-weight: bold; color: #888; display: block; margin-bottom: 15px; letter-spacing: 3px; font-family: 'Arial', sans-serif; }
-        .section-title { font-size: 36px; margin-bottom: 70px; letter-spacing: 2px; font-weight: 800; position: relative; display: inline-block; }
-        .section-title::after { content: ''; position: absolute; bottom: -15px; left: 0; width: 0; height: 3px; background: #333; transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .section-title.aos-animate::after { width: 60px; }
-
-        /* --- 黒背景セクション用のクラス --- */
-        .section-dark {
-            background-color: #111;
-            color: #fff;
-            /* 黒背景にうっすら斜めラインを入れてリッチにする */
-            background-image: linear-gradient(45deg, #1a1a1a 25%, transparent 25%, transparent 50%, #1a1a1a 50%, #1a1a1a 75%, transparent 75%, transparent);
-            background-size: 40px 40px;
+        .nav-menu ul { display: flex; gap: 30px; }
+        .nav-menu a { 
+            font-size: 13px; 
+            font-weight: bold; 
+            color: #333; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
         }
-        .section-dark .section-number { color: #aaa; }
-        .section-dark .section-title::after { background: #fff; }
-        .section-dark .feature-item p { color: #ccc; } 
+
+        /* --- セクション共通 --- */
+        section { 
+            padding: 100px 20px; 
+            width: 100%; 
+            position: relative; 
+        }
+        .container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            padding: 0 15px;
+        }
+        .section-header { margin-bottom: 60px; text-align: left; }
+        .section-number { 
+            display: block; 
+            font-size: 12px; 
+            font-weight: bold; 
+            color: #999; 
+            letter-spacing: 2px; 
+            margin-bottom: 10px;
+        }
+        .section-title { 
+            font-size: 32px; 
+            font-weight: 900; 
+            margin: 0; 
+            letter-spacing: 1px;
+            color: #000;
+        }
+
+        /* --- 背景色のバリエーション（白・グレー・黒） --- */
+        .bg-white { background-color: #ffffff; }
+        .bg-gray { background-color: #f8f9fa; /* 薄いグレー */ }
+        .bg-black { background-color: #111111; color: #ffffff; }
+        
+        /* 黒背景時のテキスト調整 */
+        .bg-black .section-title { color: #ffffff; }
+        .bg-black .section-number { color: #666; }
+        .bg-black .feature-item { background-color: #1a1a1a; border-color: #333; }
+        .bg-black .feature-item h4 { color: #fff; }
+        .bg-black .feature-item p { color: #aaa; }
 
         /* --- ヒーローエリア --- */
         .hero { 
@@ -76,97 +99,141 @@
             justify-content: center; 
             align-items: center; 
             text-align: center; 
-            color: #fff;
-            position: relative;
             background-image: url('hero.jpg.jpeg'); 
-            background-size: cover;
-            background-position: center;
-            margin-bottom: 0; 
-            padding: 0;
-            animation: bgZoom 15s infinite alternate ease-in-out;
+            background-size: cover; 
+            background-position: center; 
+            position: relative;
+            color: #fff;
+            margin-top: 0; /* ヘッダーと被らせない場合は70pxだが、画像背景なので0でOK */
         }
-        @keyframes bgZoom { from { background-size: 100%; } to { background-size: 110%; } }
-
         .hero::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            /* グラデーションで黒を重ねてよりドラマチックに */
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.4); /* 黒いフィルター */
         }
-        .hero-content { position: relative; z-index: 1; mix-blend-mode: overlay; /* 文字の重なりをおしゃれに */ }
-        /* mix-blend-modeが効かない場合のために白文字を保証 */
-        .hero-content h2, .hero-content p { color: #fff; mix-blend-mode: normal; text-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        
-        .hero h2 { font-size: 90px; margin-bottom: 10px; letter-spacing: 5px; font-weight: 900; line-height: 1; }
-        .hero p { font-size: 18px; letter-spacing: 2px; font-weight: 500; margin-top: 10px;}
+        .hero-content { position: relative; z-index: 1; padding: 0 20px; }
+        .hero h2 { 
+            font-size: 80px; 
+            font-weight: 900; 
+            letter-spacing: 5px; 
+            margin: 0 0 20px 0; 
+            line-height: 1.1;
+        }
+        .hero p { font-size: 16px; letter-spacing: 2px; font-weight: bold; margin: 0; }
+        .scroll-down {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            font-size: 11px; letter-spacing: 3px; opacity: 0.8;
+        }
 
         /* --- コンセプト --- */
-        .concept-content p { font-size: 16px; text-align: justify; line-height: 2.2; color: #444; }
-
-        /* --- 特徴（Gridレイアウト） --- */
-        /* カードのデザインを黒背景に合わせて調整 */
-        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; perspective: 1000px; }
-        .feature-item { 
-            border: 1px solid rgba(255,255,255,0.1); 
-            padding: 50px 30px; 
-            text-align: center; 
-            background: rgba(255,255,255,0.05); /* 半透明の白 */
-            backdrop-filter: blur(10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3); 
-            transition: transform 0.3s, background 0.3s; 
+        .concept-content p { 
+            font-size: 16px; 
+            line-height: 2; 
+            color: #444; 
+            margin-top: 0;
+            text-align: justify;
         }
-        .feature-item:hover { transform: translateY(-10px); background: rgba(255,255,255,0.1); }
-        .feature-item h4 { font-size: 24px; margin-bottom: 20px; letter-spacing: 1px; color: #fff; font-weight: bold; }
-        .feature-item p { font-size: 14px; color: #ccc; }
-        
-        /* --- 拠点（相模原） --- */
-        .project-item { display: flex; gap: 60px; align-items: center; border-bottom: 1px solid #ddd; padding-bottom: 60px; }
-        .project-img { width: 50%; aspect-ratio: 16/9; background-color: #333; object-fit: cover; box-shadow: 20px 20px 0px rgba(0,0,0,0.1); /* 影をハードにしておしゃれに */ border-radius: 2px; filter: grayscale(100%); transition: filter 0.5s; }
-        .project-img:hover { filter: grayscale(0%); /* ホバーでカラーに */ }
+
+        /* --- 特徴（カード） --- */
+        .feature-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 30px; 
+        }
+        .feature-item { 
+            background: #fff; 
+            padding: 40px 30px; 
+            border: 1px solid #eee; 
+            text-align: center; 
+            transition: transform 0.3s;
+        }
+        .feature-item:hover { transform: translateY(-5px); }
+        .feature-item h4 { font-size: 20px; margin: 0 0 15px 0; font-weight: bold; }
+        .feature-item p { font-size: 14px; color: #666; margin: 0; }
+
+        /* --- 拠点情報 --- */
+        .project-item { display: flex; gap: 50px; align-items: center; }
+        .project-img { width: 50%; height: 300px; object-fit: cover; background-color: #333; }
         .project-info { width: 50%; }
-        .project-info h4 { font-size: 30px; margin-bottom: 20px; font-weight: bold; letter-spacing: -1px; }
-        .address { font-style: normal; color: #666; margin-bottom: 20px; display: block; font-size: 16px; border-left: 3px solid #000; padding-left: 15px; }
+        .project-info h4 { font-size: 24px; margin-bottom: 15px; font-weight: bold; }
+        .address { font-style: normal; display: block; margin-bottom: 15px; color: #555; font-size: 15px; }
 
         /* --- 会社概要（テーブル） --- */
-        .company-table { width: 100%; border-collapse: collapse; text-align: left; background: #fff; border: 1px solid #eee; }
-        .company-table th, .company-table td { padding: 30px; border-bottom: 1px solid #eee; }
-        .company-table th { width: 25%; background-color: #f9f9f9; font-weight: bold; color: #111; border-right: 1px solid #eee; }
-        .company-table tr:last-child th, .company-table tr:last-child td { border-bottom: none; }
+        .company-table { width: 100%; border-collapse: collapse; background: #fff; }
+        .company-table th, .company-table td { 
+            padding: 20px; 
+            border-bottom: 1px solid #eee; 
+            text-align: left; 
+            font-size: 15px;
+        }
+        .company-table th { width: 30%; background-color: #fafafa; color: #333; font-weight: bold; }
+
+        /* --- 応募フォーム --- */
+        .form-container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background: #fff; 
+            padding: 50px; 
+            border: 1px solid #eee; /* 黒背景の中での境界線 */
+        }
+        .bg-black .form-container { border: none; } /* 背景が黒のときはボーダーなし */
         
-        /* --- 応募フォーム（黒背景用） --- */
-        .form-container { max-width: 600px; margin: 0 auto; background: #fff; padding: 60px; border-radius: 4px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
-        .form-group { margin-bottom: 30px; }
-        .form-label { display: block; margin-bottom: 10px; font-weight: bold; font-size: 14px; color: #111; letter-spacing: 1px; }
-        .form-control { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 0; /* 角丸なしでシャープに */ box-sizing: border-box; font-size: 16px; transition: border-color 0.3s, background 0.3s; background: #fdfdfd; }
-        .form-control:focus { border-color: #111; outline: none; background: #fff; }
+        .form-label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 14px; color: #333; }
+        .form-control { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #ddd; 
+            background: #f9f9f9; 
+            border-radius: 0; 
+            margin-bottom: 25px;
+        }
+        .radio-group label { margin-right: 20px; color: #333; font-size: 15px; }
         
-        .radio-group { display: flex; gap: 20px; }
-        .radio-group label { cursor: pointer; font-size: 16px; display: flex; align-items: center; color: #333; }
-        .radio-group input[type="radio"] { margin-right: 8px; transform: scale(1.2); accent-color: #000; }
-        
-        .submit-btn { background-color: #000; color: #fff; padding: 20px 40px; border: 1px solid #000; border-radius: 0; cursor: pointer; font-size: 16px; font-weight: bold; letter-spacing: 2px; width: 100%; display: block; margin-top: 40px; transition: all 0.3s; }
-        .submit-btn:hover { background-color: #fff; color: #000; }
+        .submit-btn { 
+            width: 100%; 
+            padding: 18px; 
+            background-color: #000; 
+            color: #fff; 
+            border: none; 
+            font-weight: bold; 
+            letter-spacing: 2px; 
+            cursor: pointer; 
+            transition: opacity 0.3s;
+        }
+        .submit-btn:hover { opacity: 0.8; }
 
         /* --- フッター --- */
-        .site-footer { background-color: #000; color: #fff; padding: 100px 20px; text-align: center; border-top: 1px solid #333; }
-        .footer-nav { display: flex; justify-content: center; gap: 40px; margin-bottom: 40px; font-size: 14px; font-weight: bold; letter-spacing: 1px; }
-        .copyright { font-size: 12px; color: #666; letter-spacing: 1px; }
+        .site-footer { background-color: #000; color: #fff; padding: 60px 20px; text-align: center; }
+        .footer-nav { margin-bottom: 30px; }
+        .footer-nav a { margin: 0 15px; font-size: 13px; font-weight: bold; color: #aaa; }
+        .footer-nav a:hover { color: #fff; }
+        .copyright { font-size: 11px; color: #555; letter-spacing: 1px; }
 
-        /* --- スマホ向け調整 --- */
+        /* --- スマホ・タブレット向け調整（バグ修正） --- */
         @media (max-width: 768px) {
-            .hero h2 { font-size: 50px; }
+            /* ヘッダー調整 */
+            .site-header { padding: 0 20px; height: 60px; justify-content: center; }
+            .nav-menu { display: none; /* スマホではメニューを非表示（シンプル化） */ }
+            
+            /* ヒーロー文字サイズ縮小 */
+            .hero h2 { font-size: 42px; letter-spacing: 2px; }
             .hero p { font-size: 14px; }
+            
+            /* セクション余白調整 */
+            section { padding: 60px 20px; }
+            .section-title { font-size: 26px; }
+            
+            /* 拠点情報縦並び */
             .project-item { flex-direction: column; gap: 30px; }
             .project-img, .project-info { width: 100%; }
-            .project-img { box-shadow: 10px 10px 0px rgba(0,0,0,0.1); }
-            .site-header { padding: 15px 20px; }
-            .logo img { height: 30px; }
-            .nav-menu { display: none; }
-            .company-table th, .company-table td { display: block; width: 100%; padding: 15px; border-right: none; }
-            .company-table th { background: #f0f0f0; }
+            .project-img { height: 200px; }
+            
+            /* フォーム調整 */
             .form-container { padding: 30px 20px; }
-            .feature-item { padding: 30px 20px; }
+            
+            /* テーブル調整 */
+            .company-table th, .company-table td { display: block; width: 100%; }
+            .company-table th { background: #f0f0f0; padding: 10px 20px; }
+            .company-table td { padding: 15px 20px; }
         }
     </style>
 </head>
@@ -174,7 +241,7 @@
 
     <header class="site-header">
         <div class="logo">
-            <img src="logo.png" alt="zeroONE Logo">
+            <img src="logo.png.png" alt="zeroONE Logo">
         </div>
         <nav class="nav-menu">
             <ul>
@@ -182,7 +249,7 @@
                 <li><a href="#feature">特徴</a></li>
                 <li><a href="#projects">拠点</a></li>
                 <li><a href="#company">会社概要</a></li>
-                <li><a href="#contact">採用情報</a></li>
+                <li><a href="#contact">採用</a></li>
             </ul>
         </nav>
     </header>
@@ -190,43 +257,47 @@
     <main>
         <section class="hero">
             <div class="hero-content">
-                <h2 data-aos="zoom-in-up" data-aos-duration="1500" data-aos-easing="ease-out-back">0 to 1</h2>
-                <p data-aos="zoom-in" data-aos-delay="500" data-aos-duration="1500" data-aos-easing="ease-out-back">基本を徹底し、無限の価値へ。</p>
-                <p style="margin-top: 80px; font-size: 14px; letter-spacing: 4px; opacity: 0.8; font-weight: bold;" data-aos="fade-up" data-aos-delay="1200" data-aos-offset="0">SCROLL DOWN ↓</p>
+                <h2 data-aos="fade-up" data-aos-duration="1000">0 to 1</h2>
+                <p data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">基本を徹底し、無限の価値へ。</p>
             </div>
+            <div class="scroll-down" data-aos="fade" data-aos-delay="1000">SCROLL DOWN</div>
         </section>
 
-        <section id="concept">
+        <section id="concept" class="bg-white">
             <div class="container">
-                <span class="section-number" data-aos="fade-right" data-aos-duration="1000">01 CONCEPT</span>
-                <h3 class="section-title" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1000">ゼロからイチへ</h3>
-                <div class="concept-content" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1200">
+                <div class="section-header">
+                    <span class="section-number" data-aos="fade-right">01 CONCEPT</span>
+                    <h3 class="section-title" data-aos="fade-right" data-aos-delay="100">ゼロからイチへ</h3>
+                </div>
+                <div class="concept-content" data-aos="fade-up" data-aos-delay="200">
                     <p>
                         0と1。それはすべての原点であり、無限の可能性。<br><br>
-                        私たち株式会社zeroONEは、コンピュータの世界にルーツを持つ配送会社です。<br>
+                        私たち株式会社zeroONEは、コンピュータの世界にルーツを持つ配送会社です。
                         0と1の組み合わせが無限のデジタル世界を創るように、私たちは「基本（0）」を徹底し、確実な「成果（1）」を積み上げることで、物流という社会インフラに無限の価値を生み出します。<br><br>
-                        複雑な時代だからこそ、やるべきことはシンプルに。<br>
-                        荷物を待つお客様へ、正確に、安全に、誠実に届けること。<br>
+                        複雑な時代だからこそ、やるべきことはシンプルに。
+                        荷物を待つお客様へ、正確に、安全に、誠実に届けること。
                         その実直な積み重ねが、揺るぎない信頼になると信じています。
                     </p>
                 </div>
             </div>
         </section>
 
-        <section id="feature" class="section-dark">
+        <section id="feature" class="bg-gray">
             <div class="container">
-                <span class="section-number" data-aos="fade-right">02 FEATURE</span>
-                <h3 class="section-title" data-aos="fade-right" data-aos-delay="200">私たちの強み</h3>
+                <div class="section-header">
+                    <span class="section-number" data-aos="fade-right">02 FEATURE</span>
+                    <h3 class="section-title" data-aos="fade-right" data-aos-delay="100">私たちの強み</h3>
+                </div>
                 <div class="feature-grid">
-                    <div class="feature-item" data-aos="flip-left" data-aos-delay="400" data-aos-duration="1500">
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="200">
                         <h4>IT×物流</h4>
                         <p>IT思考で最適化された、<br>働きやすく無駄のない環境。</p>
                     </div>
-                    <div class="feature-item" data-aos="flip-left" data-aos-delay="600" data-aos-duration="1500">
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="300">
                         <h4>プロフェッショナル</h4>
                         <p>基本（ゼロ）を徹底し、<br>プロの品質（イチ）を築く。</p>
                     </div>
-                    <div class="feature-item" data-aos="flip-left" data-aos-delay="800" data-aos-duration="1500">
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="400">
                         <h4>成長環境</h4>
                         <p>個の力を最大化し、<br>組織として無限の成果を創る。</p>
                     </div>
@@ -234,31 +305,32 @@
             </div>
         </section>
 
-        <section id="projects">
+        <section id="projects" class="bg-white">
             <div class="container">
-                <span class="section-number" data-aos="fade-right">03 LOCATION</span>
-                <h3 class="section-title" data-aos="fade-right" data-aos-delay="200">アクセス</h3>
-                
+                <div class="section-header">
+                    <span class="section-number" data-aos="fade-right">03 LOCATION</span>
+                    <h3 class="section-title" data-aos="fade-right" data-aos-delay="100">アクセス</h3>
+                </div>
                 <div class="project-list">
                     <article class="project-item">
-                        <img src="warehouse.jpg" alt="相模原拠点 倉庫画像" class="project-img" data-aos="fade-right" data-aos-delay="300" data-aos-duration="1500" data-aos-easing="ease-out-back">
-                        
-                        <div class="project-info" data-aos="fade-left" data-aos-delay="500" data-aos-duration="1500" data-aos-easing="ease-out-back">
+                        <img src="warehouse.jpg.png" alt="相模原拠点" class="project-img" data-aos="fade-right" data-aos-delay="200">
+                        <div class="project-info" data-aos="fade-left" data-aos-delay="300">
                             <h4>相模原ベース</h4>
                             <address class="address">〒252-0216<br>神奈川県相模原市中央区清新6-10-8</address>
-                            <p>zeroONEの配送拠点。</p>
+                            <p style="color: #666; font-size: 14px;">zeroONEの配送拠点。</p>
                         </div>
                     </article>
                 </div>
             </div>
         </section>
 
-        <section id="company">
+        <section id="company" class="bg-gray">
             <div class="container">
-                <span class="section-number" data-aos="fade-right">04 COMPANY</span>
-                <h3 class="section-title" data-aos="fade-right" data-aos-delay="200">企業情報</h3>
-                
-                <table class="company-table" data-aos="flip-up" data-aos-delay="400" data-aos-duration="1500">
+                <div class="section-header">
+                    <span class="section-number" data-aos="fade-right">04 COMPANY</span>
+                    <h3 class="section-title" data-aos="fade-right" data-aos-delay="100">企業情報</h3>
+                </div>
+                <table class="company-table" data-aos="fade-up" data-aos-delay="200">
                     <tr>
                         <th>会社名</th>
                         <td>株式会社zeroONE</td>
@@ -275,25 +347,24 @@
             </div>
         </section>
 
-        <section id="contact" class="section-dark">
+        <section id="contact" class="bg-black">
             <div class="container">
-                <span class="section-number" data-aos="fade-right">05 RECRUIT</span>
-                <h3 class="section-title" data-aos="fade-right" data-aos-delay="200">ドライバー応募フォーム</h3>
-                <p style="text-align: center; margin-bottom: 50px; font-size: 18px; font-weight: bold; color: #ddd;" data-aos="fade-up" data-aos-delay="300">共に未来へ走る仲間を募集しています。</p>
+                <div class="section-header">
+                    <span class="section-number" data-aos="fade-right" style="color: #999;">05 RECRUIT</span>
+                    <h3 class="section-title" data-aos="fade-right" data-aos-delay="100" style="color: #fff;">ドライバー応募</h3>
+                </div>
+                <p style="text-align: center; margin-bottom: 40px; color: #ccc;" data-aos="fade-up">共に未来へ走る仲間を募集しています。</p>
                 
-                <div class="form-container" data-aos="zoom-in" data-aos-delay="400" data-aos-duration="1500" data-aos-easing="ease-out-back">
+                <div class="form-container" data-aos="zoom-in" data-aos-delay="200">
                     <form action="" method="post">
-                        
                         <div class="form-group">
                             <label class="form-label">お名前</label>
                             <input type="text" name="name" class="form-control" placeholder="例：山田 太郎" required>
                         </div>
-
                         <div class="form-group">
                             <label class="form-label">生年月日</label>
                             <input type="date" name="birthday" class="form-control" required>
                         </div>
-
                         <div class="form-group">
                             <label class="form-label">配送経験の有無</label>
                             <div class="radio-group">
@@ -301,15 +372,13 @@
                                 <label><input type="radio" name="experience" value="なし" onclick="toggleCarOption(false)" checked> 未経験</label>
                             </div>
                         </div>
-
-                        <div class="form-group" id="car-option-group" style="display: none;">
+                        <div class="form-group" id="car-option-group" style="display: none; margin-top: 20px;">
                             <label class="form-label">持ち込み車両の有無</label>
                             <div class="radio-group">
                                 <label><input type="radio" name="car_owner" value="あり"> 車両あり</label>
                                 <label><input type="radio" name="car_owner" value="なし" checked> 車両なし（リース希望）</label>
                             </div>
                         </div>
-
                         <button type="submit" class="submit-btn">応募内容を送信する</button>
                     </form>
                 </div>
@@ -318,34 +387,29 @@
     </main>
 
     <footer class="site-footer">
-        <div class="footer-nav" data-aos="fade-up" data-aos-duration="1500">
+        <div class="footer-nav">
             <a href="#concept">コンセプト</a>
             <a href="#feature">特徴</a>
             <a href="#projects">拠点</a>
             <a href="#company">会社概要</a>
             <a href="#contact">採用</a>
         </div>
-        <p class="copyright" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1500">Copyright © zeroONE Inc. All Rights Reserved.</p>
+        <p class="copyright">Copyright © zeroONE Inc. All Rights Reserved.</p>
     </footer>
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
         AOS.init({
-            offset: 200,
-            duration: 1200,
+            offset: 100, // 開始位置を調整して消えにくくした
+            duration: 800,
             easing: 'ease-out-back',
-            delay: 100,
-            once: false,
-            mirror: true,
-            anchorPlacement: 'top-bottom',
+            once: true, // バグ防止のため一度だけ実行に変更
         });
 
         function toggleCarOption(isExperienced) {
             const carGroup = document.getElementById('car-option-group');
             if (isExperienced) {
                 carGroup.style.display = 'block';
-                carGroup.setAttribute('data-aos', 'fade-up');
-                AOS.refresh();
             } else {
                 carGroup.style.display = 'none';
             }
